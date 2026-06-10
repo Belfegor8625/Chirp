@@ -57,7 +57,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.plcoding.chirp"
+    namespace = libs.versions.projectApplicationId.get()
     compileSdk = libs.versions.projectCompileSdkVersion.get().toInt()
 
     defaultConfig {
