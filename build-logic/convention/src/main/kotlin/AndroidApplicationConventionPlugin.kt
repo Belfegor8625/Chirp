@@ -1,5 +1,4 @@
 import com.android.build.api.dsl.ApplicationExtension
-import com.android.build.api.variant.AndroidComponentsExtension
 import com.plcoding.chirp.convention.configureKotlinAndroid
 import com.plcoding.chirp.convention.libs
 import org.gradle.api.Plugin
