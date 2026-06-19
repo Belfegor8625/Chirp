@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-internal fun Project.configureKotlinAndroidTarget() {
+internal fun Project.configureAndroidTarget() {
     extensions.configure<KotlinMultiplatformExtension> {
         androidTarget {
             @OptIn(ExperimentalKotlinGradlePluginApi::class)
