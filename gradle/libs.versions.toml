@@ -160,7 +160,8 @@ convention-android-application = { id = "com.plcoding.convention.android.applica
 convention-android-application-compose = { id = "com.plcoding.convention.android.application.compose", version = "unknown" }
 convention-cmp-application = { id = "com.plcoding.convention.cmp.application", version = "unknown" }
 convention-kmp-library = { id = "com.plcoding.convention.kmp.library", version = "unknown" }
-
+convention-cmp-library = { id = "com.plcoding.convention.cmp.library", version = "unknown" }
+convention-cmp-feature = { id = "com.plcoding.convention.cmp.feature", version = "unknown" }
 
 # Android
 android-application = { id = "com.android.application", version.ref = "agp" }
