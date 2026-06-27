@@ -7,7 +7,7 @@ class CmpFeatureConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.plcoding.cmp.library")
+                apply("com.plcoding.convention.cmp.library")
             }
 
             dependencies {
@@ -26,9 +26,9 @@ class CmpFeatureConventionPlugin: Plugin<Project> {
                 "commonMainImplementation"(libs.findLibrary("jetbrains-lifecycle-compose").get())
 
                 "commonMainImplementation"(
-                    libs.findLibrary("jetbrains-lifecycle-viewmodel-savestate").get()
+                    libs.findLibrary("jetbrains-lifecycle-viewmodel-savedstate").get()
                 )
-                "commonMainImplementation"(libs.findLibrary("jetbrains-savestate").get())
+                "commonMainImplementation"(libs.findLibrary("jetbrains-savedstate").get())
                 "commonMainImplementation"(libs.findLibrary("jetbrains-bundle").get())
                 "commonMainImplementation"(libs.findLibrary("jetbrains-compose-navigation").get())
 
