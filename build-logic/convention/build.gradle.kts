@@ -7,11 +7,13 @@ plugins {
 group = "com.plcoding.convention.buildlogic"
 
 dependencies {
-    compileOnly(libs.android.desugarJdkLibs)
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.android.tools.common)
+    compileOnly(libs.ksp.gradlePlugin)
+    implementation(libs.buildkonfig.gradlePlugin)
+    implementation(libs.buildkonfig.compiler)
 }
 
 java {
@@ -57,6 +59,10 @@ gradlePlugin {
         register("cmpFeature"){
             id = "com.plcoding.convention.cmp.feature"
             implementationClass = "CmpFeatureConventionPlugin"
+        }
+        register("buildKonfig"){
+            id = "com.plcoding.convention.buildkonfig"
+            implementationClass = "BuildKonfigConventionPlugin"
         }
     }
 }
