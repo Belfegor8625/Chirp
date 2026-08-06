@@ -14,6 +14,8 @@ kotlin {
                 implementation(projects.core.domain)
 
                 implementation(libs.kotlin.stdlib)
+
+                implementation(compose.components.resources)
             }
         }
 
