@@ -14,6 +14,7 @@ kotlin {
                 implementation(projects.core.domain)
 
                 implementation(libs.kotlin.stdlib)
+                implementation(libs.material3.adaptive)
 
                 implementation(compose.components.resources)
             }
