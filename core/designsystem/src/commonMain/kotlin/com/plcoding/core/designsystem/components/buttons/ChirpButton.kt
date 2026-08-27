@@ -32,7 +32,7 @@ enum class ChirpButtonStyle {
 @Composable
 fun ChirpButton(
     text: String,
-    onCLick: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     style: ChirpButtonStyle = ChirpButtonStyle.PRIMARY,
     enabled: Boolean = true,
@@ -75,6 +75,7 @@ fun ChirpButton(
             disabledContentColor = MaterialTheme.colorScheme.extended.textDisabled
         )
     }
+
     val defaultBorderStroke = BorderStroke(
         width = 1.dp,
         color = MaterialTheme.colorScheme.extended.disabledOutline
@@ -82,7 +83,7 @@ fun ChirpButton(
     val border = when {
         style == ChirpButtonStyle.PRIMARY && !enabled -> defaultBorderStroke
         style == ChirpButtonStyle.SECONDARY -> defaultBorderStroke
-        style == ChirpButtonStyle.DESTRUCTIVE_PRIMARY -> defaultBorderStroke
+        style == ChirpButtonStyle.DESTRUCTIVE_PRIMARY && !enabled -> defaultBorderStroke
         style == ChirpButtonStyle.DESTRUCTIVE_SECONDARY -> {
             val borderColor = if (enabled) {
                 MaterialTheme.colorScheme.extended.destructiveSecondaryOutline
@@ -99,7 +100,7 @@ fun ChirpButton(
     }
 
     Button(
-        onClick = onCLick,
+        onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         shape = RoundedCornerShape(8.dp),
@@ -111,15 +112,22 @@ fun ChirpButton(
         ) {
             CircularProgressIndicator(
                 modifier = Modifier
-                    .size(16.dp)
-                    .alpha(if (isLoading) 1f else 0f),
+                    .size(15.dp)
+                    .alpha(
+                        alpha = if (isLoading) 1f else 0f
+                    ),
                 strokeWidth = 1.5.dp,
-                color = Color.Black,
+                color = Color.Black
             )
             Row(
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.spacedBy(
+                    8.dp,
+                    Alignment.CenterHorizontally
+                ),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.alpha(if (isLoading) 0f else 1f)
+                modifier = Modifier.alpha(
+                    if (isLoading) 0f else 1f
+                )
             ) {
                 leadingIcon?.invoke()
                 Text(
@@ -134,10 +142,12 @@ fun ChirpButton(
 @Composable
 @Preview
 fun ChirpPrimaryButtonPreview() {
-    ChirpTheme {
+    ChirpTheme(
+        darkTheme = true
+    ) {
         ChirpButton(
-            text = "Button",
-            onCLick = {},
+            text = "Hello world!",
+            onClick = {},
             style = ChirpButtonStyle.PRIMARY
         )
     }
@@ -146,10 +156,12 @@ fun ChirpPrimaryButtonPreview() {
 @Composable
 @Preview
 fun ChirpSecondaryButtonPreview() {
-    ChirpTheme {
+    ChirpTheme(
+        darkTheme = true
+    ) {
         ChirpButton(
-            text = "Button",
-            onCLick = {},
+            text = "Hello world!",
+            onClick = {},
             style = ChirpButtonStyle.SECONDARY
         )
     }
@@ -158,10 +170,12 @@ fun ChirpSecondaryButtonPreview() {
 @Composable
 @Preview
 fun ChirpDestructivePrimaryButtonPreview() {
-    ChirpTheme {
+    ChirpTheme(
+        darkTheme = true
+    ) {
         ChirpButton(
-            text = "Button",
-            onCLick = {},
+            text = "Hello world!",
+            onClick = {},
             style = ChirpButtonStyle.DESTRUCTIVE_PRIMARY
         )
     }
@@ -170,10 +184,12 @@ fun ChirpDestructivePrimaryButtonPreview() {
 @Composable
 @Preview
 fun ChirpDestructiveSecondaryButtonPreview() {
-    ChirpTheme {
+    ChirpTheme(
+        darkTheme = true
+    ) {
         ChirpButton(
-            text = "Button",
-            onCLick = {},
+            text = "Hello world!",
+            onClick = {},
             style = ChirpButtonStyle.DESTRUCTIVE_SECONDARY
         )
     }
@@ -182,10 +198,12 @@ fun ChirpDestructiveSecondaryButtonPreview() {
 @Composable
 @Preview
 fun ChirpTextButtonPreview() {
-    ChirpTheme {
+    ChirpTheme(
+        darkTheme = true
+    ) {
         ChirpButton(
-            text = "Button",
-            onCLick = {},
+            text = "Hello world!",
+            onClick = {},
             style = ChirpButtonStyle.TEXT
         )
     }
