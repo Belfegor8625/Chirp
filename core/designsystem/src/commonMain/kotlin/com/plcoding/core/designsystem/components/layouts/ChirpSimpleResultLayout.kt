@@ -1,6 +1,7 @@
 package com.plcoding.core.designsystem.components.layouts
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,13 +22,13 @@ import com.plcoding.core.designsystem.theme.extended
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ChirpSimpleSuccessLayout(
+fun ChirpSimpleResultLayout(
     title: String,
     description: String,
-    secondaryError: String? = null,
-    icon: @Composable () -> Unit,
+    icon: @Composable ColumnScope.() -> Unit,
     primaryButton: @Composable () -> Unit,
     secondaryButton: @Composable (() -> Unit)? = null,
+    secondaryError: String? = null,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -59,18 +60,18 @@ fun ChirpSimpleSuccessLayout(
 
             primaryButton()
 
-            if (secondaryButton != null) {
+            if(secondaryButton != null) {
                 Spacer(modifier = Modifier.height(8.dp))
                 secondaryButton()
-                if (secondaryError != null) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                if(secondaryError != null) {
+                    Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         text = secondaryError,
                         modifier = Modifier
                             .fillMaxWidth(),
+                        textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.error,
-                        textAlign = TextAlign.Center
+                        color = MaterialTheme.colorScheme.error
                     )
                 }
             }
@@ -84,7 +85,7 @@ fun ChirpSimpleSuccessLayout(
 @Preview
 fun ChirpSimpleSuccessLayoutPreview() {
     ChirpTheme(darkTheme = true) {
-        ChirpSimpleSuccessLayout(
+        ChirpSimpleResultLayout(
             title = "Hello world!",
             description = "Test description",
             icon = {
