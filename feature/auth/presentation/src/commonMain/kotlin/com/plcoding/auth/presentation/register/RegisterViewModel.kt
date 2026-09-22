@@ -8,7 +8,6 @@ import chirp.feature.auth.presentation.generated.resources.error_account_exists
 import chirp.feature.auth.presentation.generated.resources.error_invalid_email
 import chirp.feature.auth.presentation.generated.resources.error_invalid_password
 import chirp.feature.auth.presentation.generated.resources.error_invalid_username
-import com.plcoding.auth.domain.EmailValidator
 import com.plcoding.core.domain.auth.AuthService
 import com.plcoding.core.domain.util.DataError
 import com.plcoding.core.domain.util.onFailure
@@ -16,6 +15,7 @@ import com.plcoding.core.domain.util.onSuccess
 import com.plcoding.core.domain.validation.PasswordValidator
 import com.plcoding.core.presentation.util.UiText
 import com.plcoding.core.presentation.util.toUiText
+import com.plcoding.auth.domain.EmailValidator
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -54,12 +54,15 @@ class RegisterViewModel(
 
     private val isEmailValidFlow = snapshotFlow { state.value.emailTextState.text.toString() }
         .map { email -> EmailValidator.validate(email) }
+        .distinctUntilChanged()
 
     private val isUsernameValidFlow = snapshotFlow { state.value.usernameTextState.text.toString() }
         .map { username -> username.length in 3..20 }
+        .distinctUntilChanged()
 
     private val isPasswordValidFlow = snapshotFlow { state.value.passwordTextState.text.toString() }
         .map { password -> PasswordValidator.validate(password).isValidPassword }
+        .distinctUntilChanged()
 
     private val isRegisteringFlow = state
         .map { it.isRegistering }
@@ -74,7 +77,9 @@ class RegisterViewModel(
         ) { isEmailValid, isUsernameValid, isPasswordValid, isRegistering ->
             val allValid = isEmailValid && isUsernameValid && isPasswordValid
             _state.update {
-                it.copy(canRegister = !isRegistering && allValid)
+                it.copy(
+                    canRegister = !isRegistering && allValid
+                )
             }
         }.launchIn(viewModelScope)
     }
@@ -120,7 +125,7 @@ class RegisterViewModel(
                 .onSuccess {
                     _state.update {
                         it.copy(
-                            isRegistering = false
+                            isRegistering = false,
                         )
                     }
                     eventChannel.send(RegisterEvent.Success(email))
@@ -133,7 +138,7 @@ class RegisterViewModel(
                     _state.update {
                         it.copy(
                             isRegistering = false,
-                            registrationError = registrationError
+                            registrationError = registrationError,
                         )
                     }
                 }
