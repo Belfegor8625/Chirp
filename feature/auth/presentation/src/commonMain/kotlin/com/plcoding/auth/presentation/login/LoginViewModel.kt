@@ -8,6 +8,7 @@ import chirp.feature.auth.presentation.generated.resources.error_email_not_verif
 import chirp.feature.auth.presentation.generated.resources.error_invalid_credentials
 import com.plcoding.auth.domain.EmailValidator
 import com.plcoding.core.domain.auth.AuthService
+import com.plcoding.core.domain.auth.SessionStorage
 import com.plcoding.core.domain.util.DataError
 import com.plcoding.core.domain.util.onFailure
 import com.plcoding.core.domain.util.onSuccess
@@ -27,7 +28,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val sessionStorage: SessionStorage
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -39,9 +41,10 @@ class LoginViewModel(
         .map { email -> EmailValidator.validate(email) }
         .distinctUntilChanged()
 
-    private val isPasswordNotBlankFlow = snapshotFlow { state.value.passwordTextFieldState.text.toString() }
-        .map { it.isNotBlank() }
-        .distinctUntilChanged()
+    private val isPasswordNotBlankFlow =
+        snapshotFlow { state.value.passwordTextFieldState.text.toString() }
+            .map { it.isNotBlank() }
+            .distinctUntilChanged()
 
 
     private val _state = MutableStateFlow(LoginState())
@@ -68,9 +71,11 @@ class LoginViewModel(
             LoginAction.OnLoginClick -> login()
 
             LoginAction.OnTogglePasswordVisibility -> {
-                _state.update { it.copy(
-                    isPasswordVisible = !it.isPasswordVisible
-                ) }
+                _state.update {
+                    it.copy(
+                        isPasswordVisible = !it.isPasswordVisible
+                    )
+                }
             }
 
             else -> Unit
@@ -83,21 +88,25 @@ class LoginViewModel(
             isPasswordNotBlankFlow,
             isRegisteringFlow
         ) { isEmailValid, isPasswordNotBlank, isRegistering ->
-            _state.update { it.copy(
-                canLogin = !isRegistering && isEmailValid && isPasswordNotBlank
-            ) }
+            _state.update {
+                it.copy(
+                    canLogin = !isRegistering && isEmailValid && isPasswordNotBlank
+                )
+            }
         }.launchIn(viewModelScope)
     }
 
     private fun login() {
-        if(!state.value.canLogin) {
+        if (!state.value.canLogin) {
             return
         }
 
         viewModelScope.launch {
-            _state.update { it.copy(
-                isLoggingIn = true
-            ) }
+            _state.update {
+                it.copy(
+                    isLoggingIn = true
+                )
+            }
 
             val email = state.value.emailTextFieldState.text.toString()
             val password = state.value.passwordTextFieldState.text.toString()
@@ -108,22 +117,28 @@ class LoginViewModel(
                     password = password
                 )
                 .onSuccess { authInfo ->
-                    _state.update { it.copy(
-                        isLoggingIn = false
-                    ) }
+                    sessionStorage.set(authInfo)
+
+                    _state.update {
+                        it.copy(
+                            isLoggingIn = false
+                        )
+                    }
                     eventChannel.send(LoginEvent.Success)
                 }
                 .onFailure { error ->
-                    val errorMessage = when(error) {
+                    val errorMessage = when (error) {
                         DataError.Remote.UNAUTHORIZED -> UiText.Resource(Res.string.error_invalid_credentials)
                         DataError.Remote.FORBIDDEN -> UiText.Resource(Res.string.error_email_not_verified)
                         else -> error.toUiText()
                     }
 
-                    _state.update { it.copy(
-                        error = errorMessage,
-                        isLoggingIn = false
-                    ) }
+                    _state.update {
+                        it.copy(
+                            error = errorMessage,
+                            isLoggingIn = false
+                        )
+                    }
                 }
         }
     }

@@ -30,6 +30,8 @@ kotlin {
 
             implementation(libs.jetbrains.compose.navigation)
 
+            implementation(libs.core.splashscreen)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
