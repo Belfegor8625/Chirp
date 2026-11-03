@@ -14,10 +14,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.serialization.json.JsonNull.content
 
 @Composable
 fun ChirpSnackbarScaffold(
-    snackbarHostState: SnackbarHostState,
+    snackbarHostState: SnackbarHostState? = null,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
@@ -28,11 +29,13 @@ fun ChirpSnackbarScaffold(
             .union(WindowInsets.ime)
             .union(WindowInsets.navigationBars),
         snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                modifier = Modifier
-                    .padding(bottom = 24.dp)
-            )
+            snackbarHostState?.let {
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    modifier = Modifier
+                        .padding(bottom = 24.dp)
+                )
+            }
         }
     ) { innerPadding ->
         Box(
